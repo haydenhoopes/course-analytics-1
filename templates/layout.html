@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--    Loads stylesheet style.css-->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <!--    Gets jQuery from Google-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!--    Gets ability for charts from Google-->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!--    Gets external JavaScript file myscript.js-->
+        <script type="text/javascript" src="static/js/myscript.js"></script>
+    <!--    Some extra styling options-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <title>USU Course Analytics</title>
+    </head>
+
+    <body style="max-width: 100%; margin: auto; text-align: center;">
+<!--    This header has links that basically clears user selections, links to my.usu.edu, and logs the user out-->
+        <div>
+            <header>
+                <ul class="header-ul">
+                    <li class="header-li"><a href="{{ url_for('courses') }}">Start Over</a></li>
+                    <li class="header-li"><a href="https://my.usu.edu/">My USU</a></li>
+                    <li class="header-li"><a href="{{ url_for('login') }}">Logout</a></li>
+                </ul>
+            </header>
+
+            <main>
+                <div>
+<!--                    These are the dropdown menus-->
+                    <div style="text-align: center; padding: 2px;">
+                        {% if with_dropdown %}
+                            <form method="POST">
+                                <select name="college" id="college" onchange="getDepartments({{ colleges_departments }}); allowSubmit();">
+                                    {% if college %}
+                                        <option>{{ college }}</option>
+                                    {% else %}
+                                        <option selected disabled>College</option>
+                                    {% endif %}
+                                    {% for college, id in colleges.items() %}
+                                        <option>{{ college }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <select name="department" id="department" onchange="allowSubmit()">
+                                    {% if department %}
+                                        <option>{{ department }}</option>
+                                    {% else %}
+                                        <option selected disabled>Department</option>
+                                    {% endif %}
+                                </select>
+
+                                {% if terms is defined %}
+                                    <select id="selected-term" name="term" onchange="allowSubmit()">
+                                        {% if term %}
+                                            <option selected disabled>{{ term }}</option>
+                                        {% endif %}
+
+                                            <option>All Terms</option>
+                                        {% for term in terms %}
+                                            <option>{{ term }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+
+                                {% if department %}
+                                    <input type="submit" id="button1" value="Get Courses" onclick="pleaseWait()">
+                                    <button type="submit" id="button2" target=_blank name="summary" onclick="pleaseWait()" value="getDepartmentSummary">Get Department Summary</button>
+                                {% else %}
+                                    <input type="submit" id="button1" value="Get Courses" onclick="pleaseWait()" disabled>
+                                    <button type="submit" id="button2" target=_blank name="summary" onclick="pleaseWait()" value="getDepartmentSummary" disabled>Get Department Summary</button>
+                                {% endif %}
+                            <br>
+    <!--                            {% if deleted_checked %}-->
+    <!--                                <input type="checkbox" name="deleted" value="Show Deleted" checked>-->
+    <!--                            {% else %}-->
+    <!--                                <input type="checkbox" name="deleted" value="Show Deleted">-->
+    <!--                            {% endif %}-->
+    <!--                            Show only deleted courses-->
+    <!--                        <br>-->
+                            </form>
+                        {% endif %}
+
+<!--                        This div contains the loader box, which becomes visible when certain buttons are clicked-->
+                        <div id="loaderbox" style="visibility: hidden;">
+                            <div style="height: 25px; width: 25%; margin: auto">
+                                <div style="height: 15px; width: 15px; margin: auto; padding: 10px;">
+                                    <div class="loader"></div>
+                                </div>
+                            </div>
+                            <div style="height: 25px; width: 50%; margin: auto">
+                                <div>
+                                    <div style="margin: auto;">Please wait while the application accesses the Canvas database...</div>
+                                </div>
+                                <div id="this-may-take-awhile" style="margin: auto;">
+                                    <div>
+                                        <div>This may take several minutes.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+                {% block content %}{% endblock %}
+                <div style="text-align: center; color: grey;">Powered by the Center for Student Analytics</div><br>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,184 @@
+h1 {
+    font-family: 'Calibri', serif;
+    font-size: 30px;
+    text-align: center
+}
+h2 {
+    font-family: 'Calibri', serif;
+    font-size: 24px;
+    text-align: center
+}
+h3 {
+    font-size: 20px;
+    color: white;
+    font-family: Calibri, serif;
+    text-align: center;
+}
+h4 {
+    font-size: 16px;
+    color: black;
+    text-align: center;
+    font-family: 'Calibri', serif;
+}
+.navbar {
+    width: 100%;
+    color: #0f2439;
+}
+.link:hover {
+    color: #121212;
+}
+.header-ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #0f2439;
+}
+.header-li {
+    float: left;
+}
+p {
+    text-align: center;
+}
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 24px 15px;
+    text-decoration: none;
+    font-family: 'Calibri', serif;
+}
+li a:hover {
+    background-color: #0f1aaa;
+}
+a {
+    color: #0f1aaa
+}
+.pagination {
+    list-style-type: none;
+    overflow: hidden;
+}
+* {
+    font-size: 11px;
+}
+html {
+    overflow-y: scroll;
+}
+.assignment-button{
+    background-color: white;
+    width: 100%;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 5px;
+    margin: -.5px;
+}
+.assignment-button:hover {
+    color: #fb49aa
+}
+.assignment-button:active {
+    color: #fb49aa
+}
+.divTable{
+     display: table;
+     width: 70%;
+     margin: auto;
+ }
+.divTableRow {
+    display: table-row;
+}
+.divTableCell, .divTableHead {
+    display: table-cell;
+    padding: 6px 10px;
+}
+.divTableHeading {
+    background-color: #EEE;
+    display: table-row;
+    font-weight: bold;
+}
+.divTableFoot {
+    background-color: #EEE;
+    display: table-footer-group;
+    font-weight: bold;
+}
+.divTableBody {
+    display: table-row-group;
+}
+.divTableHeaderCell{
+    display: table-cell;
+    padding: 10px;
+    text-align: justify;
+    border-bottom: 1px solid black;
+}
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    display: table-cell;
+}
+.active, .accordion:hover {
+    background-color: #ccc;
+}
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+}
+.courseName {
+    width: 15%;
+}
+.courseDefaultView {
+    width: 10%;
+}
+.courseTerm {
+    width: 10%;
+}
+.courseHasSyllabus {
+    width: 9%;
+}
+.coursePublished {
+    width: 7%;
+}
+.courseTeachers {
+    width: 34%;
+}
+.courseAssignments {
+    width: 15%;
+}
+.loader {
+  border: 2px solid #f3f3f3; /* Light grey */
+  border-top: 2px solid #0f2439; /* Blue */
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+select {
+    margin: 1px;
+}
+div.chart_div table {
+    width: auto;
+    margin: 0 auto;
+}
+.hiddenRow {
+    height: 0px;
+    overflow: hidden;
+    -webkit-transition: height .5s;
+    -moz-transition: height .5s;
+    -ms-transition: height .5s;
+    -o-transition: height .5s;
+    transition: height .5s;
+}
+

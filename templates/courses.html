@@ -1,0 +1,208 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+
+<!--Display the department name-->
+<h1>{{ department }}</h1>
+<!--If there is a term, then display it-->
+{% if term %}<h2>{{ term }}</h2>{% endif %}
+
+
+
+<!--If any part of data about department statistics is defined (ie total), then load Google pie chart-->
+<!--This script tag needs to be in the HTML file because Jinja2 will collect information from courses.py.-->
+<!--It can't be collected if the script is external-->
+{% if total is defined %}
+    <script type="text/javascript">
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Default View');
+        data.addColumn('number', 'Count');
+        data.addRows([
+          ['Feed', {{ feed }}],
+          ['Modules', {{ modules }}],
+          ['Syllabus', {{ syllabus }}],
+          ['Wiki', {{ wiki }}],
+          ['Assignment', {{ assignments }}]
+        ]);
+
+        // Set chart options
+        var options = {'title':'Default View',
+                       'width':400,
+                       'height':450,
+                       'chartArea': {'width': '100%', 'height': '80%'},
+                       'legend': {'position': 'bottom'},
+                       'sliceVisibilityThreshold':0,
+                       'margin': 'auto'};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+</script>
+
+<body>
+    <!--Div that will hold the pie chart-->
+    <div style="margin: 0 auto; width: 70%">
+        <div id="chart_div" style="display: inline-block;"></div>
+    </div>
+
+        <div id="table_div" style="max-width: 60%; position: relative; margin: 0 auto;">
+            <div class="divTable">
+                <div class="divTableBody">
+                    <div class="divTableHeading">
+                        <div class="divTableHead courseName">Courses with published syllabus</div>
+                    </div>
+                    <div class="divTableRow">
+                        <div class="divTableCell courseName">{{ has_syllabus }}</div>
+                    </div>
+                    <div class="divTableHeading">
+                        <div class="divTableHead courseName">Active Courses With Published Syllabus</div>
+                    </div>
+                    <div class="divTableRow">
+                        <div class="divTableCell courseName">{{ published_courses_with_syllabus }}</div>
+                    </div>
+
+                </div>
+            </div>
+                <div class="divTable">
+                    <div class="divTableBody">
+                        <div class="divTableHeading">
+                            <div class="divTableHead courseName">Default View</div>
+                            <div class="divTableHead courseDefaultView">Count</div>
+                        </div>
+                        <div class="divTableRow">
+                            <div class="divTableCell courseName">Feed View</div>
+                            <div class="divTableCell courseDefaultView">{{ feed }}</div>
+                        </div>
+                        <div class="divTableRow">
+                            <div class="divTableCell courseName">Modules View</div>
+                            <div class="divTableCell courseDefaultView">{{ modules }}</div>
+                        </div>
+                        <div class="divTableRow">
+                            <div class="divTableCell courseName">Syllabus View</div>
+                            <div class="divTableCell courseDefaultView">{{ syllabus }}</div>
+                        </div>
+                        <div class="divTableRow">
+                            <div class="divTableCell courseName">Wiki View</div>
+                            <div class="divTableCell courseDefaultView">{{ wiki }}</div>
+                        </div>
+                        <div class="divTableRow">
+                            <div class="divTableCell courseName">Assignment View</div>
+                            <div class="divTableCell courseDefaultView">{{ assignments }}</div>
+                        </div>
+                        <div class="divTableRow">
+                            <div class="divTableCell courseName">Total Courses</div>
+                            <div class="divTableCell courseDefaultView">{{ total }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+  </body>
+{% endif %}
+
+
+
+
+<!--If there are more pages, then display the page number and next page and/or previous page-->
+{% if more_pages is defined %}
+<br>
+<div style="text-align: center;">
+        <form method="POST">
+        {% if not first %}
+                <input onclick="prev_page();pleaseWait()" type="submit" name="previous" value="Previous">
+        {% endif %}
+
+        {% if not first or not last %}
+        <span style="font-weight: bold; margin-left: .5em; margin-right: .5em">Page {{ new_page }}</span>
+        {% endif %}
+
+        <input type="hidden" name="new_page" id="new_page" value={{ new_page }}>
+
+        {% if not last %}
+                <input type="submit" onclick="next_page();pleaseWait()" name="next" value="Next">
+        {% endif %}
+        </form>
+</div>
+{% endif %}
+
+
+
+
+
+<br>
+
+
+
+
+
+<!--Make the tables that list the courses using divs-->
+<!--This first table is the header row, but is its own table-->
+{% if data %}
+<div class="divTable">
+    <div class="divTableBody">
+        <div class="divTableHeading">
+            <div class="divTableHead courseName">Name</div>
+            <div class="divTableHead courseDefaultView">Default View</div>
+            <div class="divTableHead courseTerm">Term</div>
+            <div class="divTableHead courseHasSyllabus">Has Syllabus</div>
+            <div class="divTableHead coursePublished">Published</div>
+            <div class="divTableHead courseTeachers">Teachers</div>
+            <div class="divTableHead courseAssignments">Assignments</div>
+        </div>
+    </div>
+</div>
+
+<!--For each course-->
+        {% for course in range(data|length) %}
+
+<!--Make a div table that displays information-->
+<div class="divTable">
+    <div class="divTableBody">
+        <div class="divTableRow">
+            <div class="divTableCell courseName"><a target="_blank" href="https://usu.instructure.com/courses/{{ data[course]['id']|string }}">{{ data[course]['name'] }}</a></div>
+            <div class="divTableCell courseDefaultView">{{ data[course]['default_view'] }}</div>
+            <div class="divTableCell courseTerm">{{ data[course]['term']['name'] }}</div>
+            <div class="divTableCell courseHasSyllabus">{{ data[course]['has_syllabus'] }}</div>
+            <div class="divTableCell coursePublished">{{ data[course]['published'] }}</div>
+            <div class="divTableCell courseTeachers">{{ data[course]['teachers'] }}</div>
+            <div class="divTableCell assignment-button courseAssignments" onclick="openAssignmentPanel(&quot;{{ data[course]['id'] }}&quot;)">Get Assignment Info</div>
+        </div>
+    </div>
+</div>
+
+<!--And make another table that is hidden that will later be filled with the assignment div-->
+<div class="divTable">
+    <div class="divTableBody">
+        <div class="divTableRow hiddenRow" id="{{ data[course]['id'] }}"></div>
+    </div>
+</div>
+
+
+{% endfor %}{% endif %}
+
+<!--If there is no data at all-->
+{% if not data and not total and not homepage %}
+<p>There is no data to display.</p>
+{% endif %}
+
+
+
+
+
+<br>
+
+
+{% endblock content%}
