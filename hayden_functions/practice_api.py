@@ -1,6 +1,6 @@
 import requests
 from pprint import pprint
-def courses(token='1009~YfadrNgczvoB9ZWk2q9isEiCUwEzAXjiZfldkCmVJTmt6bICqc5jMXacV1rDYm1E', id='15'):
+def courses(token='', id='15'):
     rh = {"Authorization": "Bearer %s" % token}
     BASE_PARAMS = {'per_page': '50'}
     CANVAS_DOMAIN = "usu.instructure.com"
